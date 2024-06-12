@@ -12,12 +12,11 @@
 -- 2. What year has the highest average imdb rating?
 
 -- select specs.release_year,
--- 	rating.movie_id, 
 -- 	avg(rating.imdb_rating) as avg_rating
 -- from specs
--- left join rating
+-- inner join rating
 -- on specs.movie_id = rating.movie_id
--- group by specs.release_year, rating.movie_id
+-- group by specs.release_year
 -- order by avg_rating desc;
 
 -- 2008 had the highest imdb rating of 9.0
@@ -33,6 +32,7 @@
 -- 	on specs.movie_id = revenue.movie_id
 -- 	where specs.mpaa_rating = 'G'	
 -- order by revenue.movie_id
+-- limit 1;
 
 -- Toy Story 4 was the highest grossing G rated movie. 
 
@@ -55,11 +55,12 @@
 -- 4. Write a query that returns, for each distributor in the distributors table, the distributor name and the number of movies associated with that distributor in the movies 
 -- table. Your result set should include all of the distributors, whether or not they have any movies in the movies table.
 
--- select distributors.company_name, count(specs.movie_id)
+-- select distributors.company_name, count(film_title) as count_film_title
 -- from distributors
--- inner join specs
+-- left join specs
 -- on distributors.distributor_id = specs.domestic_distributor_id
--- group by distributors.company_name;
+-- group by distributors.company_name
+-- order by count_film_title desc;
 
 -- 5. Write a query that returns the five distributors with the highest average movie budget.
 
@@ -72,21 +73,23 @@
 -- on specs.movie_id = revenue.movie_id
 -- group by distributors.company_name
 -- order by avg_budget desc
--- limit 5
+-- limit 5;
 
 -- Walt Disney, Sony Pictures, Lionsgate, DreamWorks, Warner Bros.
 
 -- 6. How many movies in the dataset are distributed by a company which is not headquartered in California? Which of these movies has the highest imdb rating?
 
--- select distributors.headquarters, 
--- 	count(specs.film_title), distributors.company_name
--- from distributors
--- left join specs
--- 	on distributors.distributor_id = specs.domestic_distributor_id
--- 	where distributors.headquarters not ilike '%CA'	
--- group by distributors.headquarters, distributors.company_name
+-- select s.film_title,
+-- 	r.imdb_rating
+-- from specs as s
+-- left join distributors as d
+-- 	on s.domestic_distributor_id = d.distributor_id
+-- left join rating as r
+-- 	on s.movie_id = r.movie_id
+-- where d.headquarters not like '%CA%'
+-- order by 2 desc;
 
--- 2 movies are distributed by companies outide of CA
+-- 2 movies are distributed by companies outide of CA. Dirty Dancing had the higher rating.
 
 -- select distributors.headquarters, 
 -- 	distributors.company_name,
